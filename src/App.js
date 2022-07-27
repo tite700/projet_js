@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {useEffect, useState} from "react";
+import {click} from "@testing-library/user-event/dist/click";
 
 
 const App = () => {
@@ -35,9 +36,14 @@ const App = () => {
   const checkAnswer = (option, optionIndex, correctAnswer) => {
     console.log(optionIndex, correctAnswer)
     if (optionIndex == correctAnswer && !correctAnswers.includes(option)) {
-      setCorrectAnswers([...correctAnswers,option])
+      correctAnswers.push(option)
       console.log(correctAnswers)
     }
+    if (!clicked.includes(option)) {
+      clicked.push(option)
+    }
+    console.log(clicked)
+    console.log(clicked.includes(option))
 
   }
 
@@ -73,7 +79,11 @@ const App = () => {
               <div className="question-buttons">
                 {question.option.map((option, optionIndex) => (
                     <div className="question-button">
-                      <button onClick={() => checkAnswer(option,optionIndex+1, question.correct)}>{option}</button>
+                      <button
+                          disabled={clicked.includes(option)}
+                          onClick={() => checkAnswer(option,optionIndex+1, question.correct)}>{option}
+                      </button>
+
                     </div>
                 ))}
               </div>
