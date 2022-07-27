@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.level-selector {
+  background-color: chocolate;
+}
+
+.question-area {
+  background-color: bisque;
+}
+
+.question-box {
+  background-color: #aa763d;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 10px;
+}
+
+.question-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.question-button {
+  display: flex;
+  flex-direction: column;
+}
