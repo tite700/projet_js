@@ -4,10 +4,11 @@ import {click} from "@testing-library/user-event/dist/click";
 
 
 const App = () => {
-  const [chosenLevel, setChosenLevel] = useState('2')
+  const [chosenLevel, setChosenLevel] = useState(null)
   const [words,setWords] = useState(null)
   const [correctAnswers, setCorrectAnswers] = useState([])
   const [clicked, setClicked] = useState([])
+  const [score, setScore] = useState(0)
 
   const getRandomWords = () => {
 
@@ -34,16 +35,17 @@ const App = () => {
   }, [chosenLevel])
 
   const checkAnswer = (option, optionIndex, correctAnswer) => {
-    console.log(optionIndex, correctAnswer)
+
     if (optionIndex == correctAnswer && !correctAnswers.includes(option)) {
       correctAnswers.push(option)
-      console.log(correctAnswers)
+      setScore(score => score+1)
+    } else {
+      setScore(score => score-1)
     }
     if (!clicked.includes(option)) {
       clicked.push(option)
     }
     console.log(clicked)
-    console.log(clicked.includes(option))
 
   }
 
@@ -70,31 +72,39 @@ const App = () => {
 
       {chosenLevel && words && <div className="question-area">
         <h1>Try to beat the level {chosenLevel}</h1>
+        <h3>Your score is {score}</h3>
 
-        {words.quizlist.map((question, questionIndex) => (
-            <div className="question-box">
-              {question.quiz.map((tip, tipIndex) => (
-                  <p key={tipIndex}>{tip}</p>
-              ))}
-              <div className="question-buttons">
-                {question.option.map((option, optionIndex) => (
-                    <div className="question-button">
-                      <button
-                          disabled={clicked.includes(option)}
-                          onClick={() => checkAnswer(option,optionIndex+1, question.correct)}>{option}
-                      </button>
+        <div className="questions" >
 
-                    </div>
+
+          {words.quizlist.map((question, questionIndex) => (
+              <div key={questionIndex} className="question-box">
+                {question.quiz.map((tip, tipIndex) => (
+                    <p key={tipIndex}>{tip}</p>
                 ))}
-              </div>
+                <div className="question-buttons">
+                  {question.option.map((option, optionIndex) => (
+                      <div className="question-button">
+                        <button
+                            disabled = {clicked.includes(option)}
+                            onClick={() => checkAnswer(option,optionIndex+1, question.correct)}>{option}
+                        </button>
+                        {correctAnswers.includes(option) && <p> Correct ! </p>}
+                        {clicked.includes(option) && !correctAnswers.includes(option) && <p> Wrong ! </p>}
 
-              <p>{question.correct}</p>
-            </div>))}
+                      </div>
+                  ))}
+                </div>
+              </div>))}
+
+          </div>
+
+        <button onClick={() => setChosenLevel(null)}>Change level</button>
 
       </div>}
 
     </div>
-        );
+        )
 }
 
 export default App;
